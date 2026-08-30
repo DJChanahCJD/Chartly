@@ -10,8 +10,8 @@ const BILLBOARD_SLUGS: Record<string, string> = {
   "artist-100": "artist-100",
 };
 
-// What each chart ranks — surface it in the response so consumers don't
-// have to know that album-200 means albums and artist-100 means artists.
+// Chart kind: on artist charts the "title" slot holds the artist name, so
+// the `title` field is omitted for those entries.
 const BILLBOARD_TYPES: Record<string, "songs" | "albums" | "artists"> = {
   "hot-100": "songs",
   "album-200": "albums",
@@ -57,7 +57,7 @@ function labelText(chunk: string, label: string): number | null {
   return Number.isNaN(n) ? null : n;
 }
 
-function parseChartPage(html: string, chart: string) {
+function parseChartPage(html: string, chart: string, pageUrl: string) {
   const dateMatch = html.match(/id="chart-date-picker"\s+data-date="([^"]+)"/);
   const date = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
   const isArtistChart = BILLBOARD_TYPES[chart] === "artists";
@@ -92,10 +92,8 @@ function parseChartPage(html: string, chart: string) {
 
   if (entries.length === 0) throw new Error("billboard upstream: no entries parsed");
   return {
-    source: "billboard" as const,
-    chart,
-    type: BILLBOARD_TYPES[chart],
     date,
+    url: pageUrl,
     entries,
   };
 }
@@ -108,5 +106,5 @@ export async function fetchBillboardChart(chart: string, date?: string) {
   const weekPath = date ? `/${chartWeekSaturday(date)}/` : "/";
   const res = await fetch(`https://www.billboard.com/charts/${slug}${weekPath}`, { headers: UA });
   if (!res.ok) throw new Error(`billboard upstream ${res.status}`);
-  return parseChartPage(await res.text(), chart);
+  return parseChartPage(await res.text(), chart, res.url);
 }

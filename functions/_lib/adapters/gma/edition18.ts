@@ -1,0 +1,47 @@
+// 第18届台湾金曲奖（2007年）获奖名单。资料来源：文化部影视及流行音乐产业局官方开放数据，得奖者人名参考百度百科补全。
+import type { GmaEditionData } from "./types";
+
+const edition18: GmaEditionData = {
+  edition: 18,
+  year: 2007,
+  date: "2007-06-16",
+  categories: [
+    { name: "最佳年度歌曲奖", winner: "陶喆、蔡依林", title: "今天你要嫁给我（太美丽）" },
+    { name: "最佳国语专辑奖", winner: "MC HotDog（热狗）", title: "Wake Up" },
+    { name: "最佳台语专辑奖", winner: "典选音乐事业股份有限公司", title: "真的假的！？" },
+    { name: "最佳客语专辑奖", winner: "大大树音乐图像", title: "种树" },
+    { name: "最佳原住民语专辑奖", winner: "参拾柒度制作有限公司", title: "美丽心民谣" },
+    { name: "最佳音乐录影带导演奖", winner: "冯德伦", title: "天下大同（如果没有你）" },
+    { name: "最佳作曲人奖（流行音乐类）", winner: "吴青峰", title: "小情歌（小宇宙）" },
+    { name: "最佳作词人奖（流行音乐类）", winner: "钟永丰", title: "种树" },
+    { name: "最佳编曲人奖", winner: "陈主惠", title: "造字的人（黑暗之光）" },
+    { name: "最佳专辑制作人奖（流行音乐类）", winner: "陈惠婷、许哲毓、林前源、林挥斌、许哲珮", title: "我想你会变成这样都是我害的" },
+    { name: "最佳单曲制作人奖", winner: "周杰伦", title: "霍元甲（霍元甲）" },
+    { name: "最佳国语男歌手奖", winner: "李玖哲", title: "Baby 是我" },
+    { name: "最佳台语男歌手奖", winner: "施文彬", title: "真情味" },
+    { name: "最佳国语女歌手奖", winner: "蔡依林", title: "舞娘" },
+    { name: "最佳台语女歌手奖", winner: "谢金燕", title: "呛声" },
+    { name: "最佳客语歌手奖", winner: "林生祥", title: "种树" },
+    { name: "最佳原住民语歌手奖", winner: "伊吉", title: "原住民歌谣1" },
+    { name: "最佳乐团奖", winner: "苏打绿", title: "小宇宙" },
+    { name: "最佳演唱组合奖", winner: "昊恩家家", title: "Blue in Love" },
+    { name: "最佳新人奖", winner: "黄建为", title: "Over the Way" },
+    { name: "最佳专辑奖（演奏类）", winner: "源动力文化发展事业有限公司", title: "送你冬日蓝" },
+    { name: "最佳专辑制作人奖（演奏类）", winner: "陈建年", title: "东清村3号" },
+    { name: "特别贡献奖", winner: "张弘毅" },
+    { name: "最佳古典音乐专辑奖", winner: "奏鸣曲音乐企业有限公司", title: "方铭健的文艺复兴世界" },
+    { name: "最佳民族乐曲专辑奖", winner: "如是我闻文化股份有限公司", title: "如是宁静－成公亮古琴独奏专辑" },
+    { name: "最佳戏曲曲艺专辑奖", winner: "喜玛拉雅音乐事业股份有限公司", title: "台湾答嘴鼓－有钱真好" },
+    { name: "最佳儿童乐曲专辑奖", winner: "道声出版社", title: "你是独特的宝贝" },
+    { name: "最佳宗教音乐专辑奖", winner: "光正万教殿", title: "万慧天 慧皇国" },
+    { name: "最佳跨界音乐专辑奖", winner: "海峡文化事业股份有限公司", title: "桃山小学的夏天音乐课" },
+    { name: "最佳作曲人奖（传统暨艺术音乐类）", winner: "史撷咏", title: "梦土－部落之心" },
+    { name: "最佳作词人奖（传统暨艺术音乐类）", winner: "黄静雅", title: "春天伫陀位" },
+    { name: "最佳专辑制作人奖（传统暨艺术音乐类）", winner: "徐伯年", title: "春华秋水" },
+    { name: "最佳演唱奖（传统暨艺术音乐类）", winner: "陆一嬋、倪百聪", title: "万慧天 慧皇国" },
+    { name: "最佳演奏奖（传统暨艺术音乐类）", winner: "陈必先", title: "莫札特钢琴作品集" },
+    { name: "评审团奖", winner: "概念音乐有声出版有限公司", title: "台湾铁道声音纪实" },
+  ],
+};
+
+export default edition18;

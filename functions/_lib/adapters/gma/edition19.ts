@@ -1,0 +1,48 @@
+// 第19届台湾金曲奖（2008年）获奖名单。资料来源：文化部影视及流行音乐产业局官方开放数据，得奖者人名参考百度百科补全。
+import type { GmaEditionData } from "./types";
+
+const edition19: GmaEditionData = {
+  edition: 19,
+  year: 2008,
+  categories: [
+    { name: "最佳年度歌曲奖", winner: "周杰伦", title: "青花瓷（我很忙）" },
+    { name: "最佳国语专辑奖", winner: "莫文蔚", title: "拉活 莫文蔚" },
+    { name: "最佳台语专辑奖", winner: "萧煌奇", title: "真情歌" },
+    { name: "最佳客语专辑奖", winner: "黄连煜", title: "2007 BANANA" },
+    { name: "最佳原住民语专辑奖", winner: "依拜维吉", title: "依拜维吉" },
+    { name: "最佳作曲人奖（流行音乐类）", winner: "周杰伦", title: "青花瓷（我很忙）" },
+    { name: "最佳作词人奖（流行音乐类）", winner: "方文山", title: "青花瓷（我很忙）" },
+    { name: "最佳编曲人奖", winner: "小安", title: "特务J（特务J专辑）" },
+    { name: "最佳专辑制作人奖（流行音乐类）", winner: "蔡健雅", title: "Goodbye & Hello" },
+    { name: "最佳单曲制作人奖", winner: "阿弟仔", title: "特务J（特务J专辑）" },
+    { name: "最佳国语男歌手奖", winner: "曹格", title: "Super Sunshine" },
+    { name: "最佳台语男歌手奖", winner: "萧煌奇", title: "真情歌" },
+    { name: "最佳国语女歌手奖", winner: "蔡健雅", title: "Goodbye & Hello" },
+    { name: "最佳台语女歌手奖", winner: "詹雅雯", title: "人生公路 深情海岸 专辑" },
+    { name: "最佳客语歌手奖", winner: "黄连煜", title: "2007 BANANA" },
+    { name: "最佳原住民语歌手奖", winner: "依拜维吉", title: "依拜维吉" },
+    { name: "最佳乐团奖", winner: "苏打绿", title: "无与伦比的美丽" },
+    { name: "最佳演唱组合奖", winner: "大嘴巴", title: "大嘴巴同名专辑" },
+    { name: "最具潜力新人奖", winner: "萧贺硕", title: "硕一硕的流浪地图" },
+    { name: "最佳专辑奖（演奏类）", winner: "风潮音乐国际股份有限公司", title: "托斯卡尼 我想起你" },
+    { name: "最佳专辑制作人奖（演奏类）", winner: "周杰伦", title: "不能说的．秘密" },
+    { name: "最佳作曲人奖（演奏类）", winner: "周杰伦、Terdsak Janpan", title: "琴房（不能说的．秘密）" },
+    { name: "最佳音乐录影带导演奖", winner: "周格泰", title: "崇拜（崇拜）" },
+    { name: "特别贡献奖", winner: "陈志远、朱丁顺" },
+    { name: "最佳传统音乐专辑奖", winner: "屏东县台湾原住民文化研究会", title: "Sepiuma 唱情歌" },
+    { name: "最佳古典音乐专辑奖", winner: "财团法人邱再兴文教基金会", title: "谢宛臻 OBOE 新美声" },
+    { name: "最佳儿童音乐专辑奖", winner: "高雄市台湾山地文化研究会", title: "邹族传统童谣" },
+    { name: "最佳宗教音乐专辑奖", winner: "希望之声文化有限公司", title: "启示录前卷－令人惊叹的未来世界" },
+    { name: "最佳跨界音乐专辑奖", winner: "典选音乐事业股份有限公司", title: "狼图腾" },
+    { name: "最佳作曲人奖（传统暨艺术音乐类）", winner: "何训田", title: "秘厘图（声音图案）" },
+    { name: "最佳作词人奖（传统暨艺术音乐类）", winner: "郑愁予", title: "一碟儿诗话（旅梦）" },
+    { name: "最佳编曲人奖（传统暨艺术音乐类）", winner: "钟耀光", title: "【高一生歌曲】组曲（原住民新韵）" },
+    { name: "最佳专辑制作人奖（传统暨艺术音乐类）", winner: "王志萍", title: "新古典昆曲《寻找游园惊梦》" },
+    { name: "最佳传统音乐诠释奖", winner: "魏海敏", title: "芳华现─魏海敏梅派经典唱段选辑" },
+    { name: "最佳演唱奖（传统暨艺术音乐类）", winner: "拉纤人男声合唱团", title: "In Love with You 暗恋男声" },
+    { name: "最佳演奏奖（传统暨艺术音乐类）", winner: "严俊杰", title: "Chun-Chieh Yen Debut Album" },
+    { name: "评审团奖（传统暨艺术音乐类）", winner: "林煜智", title: "67.5公分的天空" },
+  ],
+};
+
+export default edition19;

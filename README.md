@@ -18,10 +18,8 @@
 
 ```json
 {
-  "source": "billboard",
-  "chart": "200",
-  "type": "albums",
   "date": "2026-08-29",
+  "url": "https://www.billboard.com/charts/billboard-200/",
   "entries": [
     { "rank": 1, "title": "...", "artist": "...",
       "cover": "...", "lastWeek": 2, "peak": 1, "weeks": 10 }
@@ -29,19 +27,29 @@
 }
 ```
 
-`type` 标识榜单类型：`songs`（单曲）/ `albums`（专辑）/ `artists`（歌手，条目无 `title` 字段，`artist` 即歌手名）。
+歌手榜（`artist-100`）的条目没有 `title` 字段，`artist` 即歌手名。`date` 是归一化后的榜单周六（可能与请求的 `?date` 不同），`url` 是数据来源的官网页面。
+
+最小必要原则：响应不回显路径中已包含的 `source` / `chart` / `type`，只返回调用者无法自行推导的字段。
 
 奖项响应：
 
 ```json
 {
-  "source": "grammy",
-  "year": 2026,
+  "url": "https://www.grammy.com/awards/68th-annual-grammy-awards-2025/",
   "categories": [
-    { "name": "Record Of The Year", "winner": "...", "nominees": ["..."] }
+    {
+      "name": "Record Of The Year",
+      "winner": "Kendrick Lamar , SZA",
+      "title": "luther",
+      "nominees": ["luther — Kendrick Lamar , SZA", "..."]
+    }
   ]
 }
 ```
+
+- `year` 为**颁奖年份**（第 N 届 = N + 1958；第 60 届起官网 slug 用前一年，adapter 自动处理）。响应不回显请求参数，只返回 `url`（官网仪式页）与 `categories`。
+- `winner` / `title` 来自页面完整 Winners 表格，覆盖该届**全部奖项**（约 85–95 个分类）。
+- `nominees` 仅官网在仪式页渲染了提名卡片的头部奖项（Record/Album/Song of the Year、Best New Artist 等）才有内容，其余为空数组。
 
 错误统一为 `{ "error": { "status": 404, "message": "..." } }`。
 
