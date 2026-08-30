@@ -29,12 +29,12 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
       version: "0.1.0",
       endpoints: [
         ...BILLBOARD_CHARTS.map((c) => `/api/charts/billboard/${c}`),
-        `/api/awards/gma/{year}  (available: ${GMA_YEARS.join(", ")})`,
+        `/api/awards/gma/{year}`,
         "/api/awards/grammy/{year}",
         "/api/awards/nobel/{year}",
         "/api/awards/oscars/{year}",
-        "/api/awards/oscars-org/{year}  (oscars.org)",
-        "/api/awards/tga/{year}  (2014+, winners only)",
+        "/api/awards/oscars-org/{year}",
+        "/api/awards/tga/{year}",
       ],
     });
   }
