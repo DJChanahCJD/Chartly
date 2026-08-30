@@ -5,6 +5,7 @@ import { rateLimit, clientIp } from "../_lib/ratelimit";
 import { fetchBillboardChart, BILLBOARD_CHARTS } from "../_lib/adapters/billboard";
 import { fetchGrammy } from "../_lib/adapters/grammy";
 import { fetchGma, GMA_YEARS } from "../_lib/adapters/gma";
+import { fetchNobel } from "../_lib/adapters/nobel";
 
 export const onRequest: PagesFunction = async ({ request, params }) => {
   if (request.method === "OPTIONS") return preflight();
@@ -27,6 +28,7 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
         ...BILLBOARD_CHARTS.map((c) => `/api/charts/billboard/${c}`),
         `/api/awards/gma/{year}  (available: ${GMA_YEARS.join(", ")})`,
         "/api/awards/grammy/{year}",
+        "/api/awards/nobel/{year}",
       ],
     });
   }
@@ -60,7 +62,7 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
 
     if (resource === "awards") {
       const year = Number(rest0);
-      if (!Number.isInteger(year) || year < 1950 || year > 2100) {
+      if (!Number.isInteger(year) || year < 1901 || year > 2100) {
         return errorJson(400, "invalid year");
       }
       if (source === "gma") {
@@ -69,13 +71,18 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
       if (source === "grammy") {
         return await withCache(request, 86400, async () => json(await fetchGrammy(year)));
       }
+      if (source === "nobel") {
+        return await withCache(request, 86400, async () => json(await fetchNobel(year)));
+      }
       return errorJson(404, `unknown awards source: ${source}`);
     }
 
     return errorJson(404, "not found");
   } catch (err) {
     const message = err instanceof Error ? err.message : "upstream error";
-    if (message.startsWith("gma:")) return errorJson(404, message);
+    if (message.startsWith("gma:") || message.startsWith("nobel:")) {
+      return errorJson(404, message);
+    }
     return errorJson(502, `upstream fetch failed: ${message}`);
   }
 };
