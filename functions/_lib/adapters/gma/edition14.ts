@@ -4,7 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition14: GmaEditionData = {
   edition: 14,
   year: 2003,
-  date: "2003-08-02",
   categories: [
     { name: "最佳流行音乐演唱专辑奖", winner: "陈奕迅", title: "Special Thanks To..." },
     { name: "最佳流行音乐演奏专辑奖", winner: "风潮有声出版有限公司", title: "第33个街角转弯" },

@@ -4,7 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition18: GmaEditionData = {
   edition: 18,
   year: 2007,
-  date: "2007-06-16",
   categories: [
     { name: "最佳年度歌曲奖", winner: "陶喆、蔡依林", title: "今天你要嫁给我（太美丽）" },
     { name: "最佳国语专辑奖", winner: "MC HotDog（热狗）", title: "Wake Up" },

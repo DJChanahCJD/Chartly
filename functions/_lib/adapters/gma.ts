@@ -90,8 +90,6 @@ const GMA_DATA = new Map<number, GmaEditionData>(
 export const GMA_YEARS = EDITIONS.map((e) => e.year).sort((a, b) => a - b);
 
 export function fetchGma(year: number): {
-  source: "gma";
-  year: number;
   edition: number;
   categories: GmaEditionData["categories"];
 } {
@@ -100,8 +98,6 @@ export function fetchGma(year: number): {
     throw new Error(`gma: no data for year ${year} (available: ${GMA_YEARS.join(", ")})`);
   }
   return {
-    source: "gma",
-    year: data.year,
     edition: data.edition,
     categories: data.categories,
   };

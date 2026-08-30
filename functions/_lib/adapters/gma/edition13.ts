@@ -4,7 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition13: GmaEditionData = {
   edition: 13,
   year: 2002,
-  venue: "台湾高雄市",
   categories: [
     { name: "最佳流行音乐演唱专辑奖", winner: "周杰伦", title: "周杰伦范特西" },
     { name: "最佳流行音乐演奏专辑奖", winner: "风潮有声出版有限公司", title: "月光边境" },

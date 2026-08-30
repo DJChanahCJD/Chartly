@@ -4,8 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition36: GmaEditionData = {
   edition: 36,
   year: 2025,
-  date: "2025-06-28",
-  venue: "台北小巨蛋",
   categories: [
     { name: "年度专辑奖", winner: "李竺芯", title: "水" },
     { name: "年度歌曲奖", winner: "Energy", title: "星期五晚上" },

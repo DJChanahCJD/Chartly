@@ -4,8 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition33: GmaEditionData = {
   edition: 33,
   year: 2022,
-  date: "2022-07-02",
-  venue: "高雄巨蛋体育馆",
   categories: [
     { name: "年度专辑奖", winner: "蔡健雅", title: "DEPART" },
     { name: "年度歌曲奖", winner: "茄子蛋", title: "爱情你比我想的阁较伟大" },

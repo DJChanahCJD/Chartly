@@ -4,8 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition37: GmaEditionData = {
   edition: 37,
   year: 2026,
-  date: "2026-06-27",
-  venue: "台北小巨蛋",
   categories: [
     { name: "年度专辑奖", winner: "蔡依林", title: "Pleasure" },
     { name: "年度歌曲奖", winner: "A-Lin", title: "幸福在歌唱" },

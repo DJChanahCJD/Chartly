@@ -14,9 +14,5 @@ export interface GmaEditionData {
   edition: number;
   /** 颁奖年份（颁奖典礼所在年份） */
   year: number;
-  /** 颁奖日期 YYYY-MM-DD，未知则省略 */
-  date?: string;
-  /** 颁奖地点，未知则省略 */
-  venue?: string;
   categories: GmaCategory[];
 }

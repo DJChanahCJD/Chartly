@@ -4,7 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition1: GmaEditionData = {
   edition: 1,
   year: 1990,
-  date: "1990-01-06",
   categories: [
     { name: "最佳年度歌曲奖", winner: "潘美辰", title: "我想有个家" },
     { name: "最佳作词人奖", winner: "张景洲", title: "针线情" },

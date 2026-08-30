@@ -4,8 +4,6 @@ import type { GmaEditionData } from "./types";
 const edition12: GmaEditionData = {
   edition: 12,
   year: 2001,
-  date: "2001-05-05",
-  venue: "高雄中正文化中心",
   categories: [
     { name: "最佳流行音乐演唱专辑奖", winner: "周杰伦", title: "杰伦" },
     { name: "最佳流行音乐演奏专辑奖", winner: "亚洲唱片有限公司", title: "垦丁－台湾国家公园音乐(一)" },
