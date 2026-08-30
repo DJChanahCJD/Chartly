@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chartly — Music Charts & Awards API</title>
+<style>
+  :root {
+    --bg: #0d0f12;
+    --panel: #14171c;
+    --border: #23282f;
+    --text: #e6e9ee;
+    --dim: #8b93a1;
+    --accent: #4ade80;
+    --accent-dim: #1c3a2a;
+    --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
+  header {
+    padding: 20px 28px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  header h1 { font-size: 20px; letter-spacing: 0.5px; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--dim); font-size: 13px; }
+  main { flex: 1; display: grid; grid-template-columns: 280px 1fr; min-height: 0; }
+  aside { border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; }
+  aside h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); margin: 14px 8px 8px; }
+  aside h2:first-child { margin-top: 0; }
+  .endpoint {
+    display: block; width: 100%; text-align: left;
+    font-family: var(--mono); font-size: 12.5px; color: var(--text);
+    background: none; border: 1px solid transparent; border-radius: 6px;
+    padding: 8px 10px; cursor: pointer; margin-bottom: 2px;
+  }
+  .endpoint:hover { background: var(--panel); }
+  .endpoint.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+  .endpoint .method { color: var(--dim); margin-right: 6px; font-size: 11px; }
+  section { display: flex; flex-direction: column; padding: 20px 28px; overflow-y: auto; }
+  .urlbar {
+    display: flex; gap: 10px; margin-bottom: 16px;
+  }
+  .urlbar input {
+    flex: 1; font-family: var(--mono); font-size: 13px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); padding: 10px 12px; outline: none;
+  }
+  .urlbar input:focus { border-color: var(--accent); }
+  .urlbar button {
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: #052e16; border: none; border-radius: 6px; padding: 0 22px;
+  }
+  .urlbar button:hover { filter: brightness(1.1); }
+  .meta { display: flex; gap: 16px; margin-bottom: 14px; font-family: var(--mono); font-size: 12px; color: var(--dim); }
+  .meta .status-ok { color: var(--accent); }
+  .meta .status-err { color: #f87171; }
+  .meta button {
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    color: var(--dim); font-family: var(--mono); font-size: 11px;
+    padding: 2px 8px; cursor: pointer; margin-left: auto;
+  }
+  .meta button:hover { color: var(--text); border-color: var(--dim); }
+  pre {
+    flex: 1; background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+    overflow: auto; white-space: pre;
+  }
+  .placeholder { color: var(--dim); font-style: italic; }
+  .str { color: #7dd3fc; } .num { color: #fbbf24; } .key { color: #c4b5fd; }
+  .bool { color: #f87171; } .null { color: #6b7280; }
+  footer { padding: 12px 28px; border-top: 1px solid var(--border); color: var(--dim); font-size: 12px; }
+  footer code { font-family: var(--mono); }
+  @media (max-width: 720px) { main { grid-template-columns: 1fr; } aside { border-right: none; border-bottom: 1px solid var(--border); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Chart<span>ly</span></h1>
+  <p>Free public music charts &amp; awards API — no key required</p>
+</header>
+<main>
+  <aside id="sidebar"></aside>
+  <section>
+    <div class="urlbar">
+      <input id="url" spellcheck="false" />
+      <button id="send">Send</button>
+    </div>
+    <div class="meta" id="meta"></div>
+    <pre id="output"><span class="placeholder">Select an endpoint or enter a URL…</span></pre>
+  </section>
+</main>
+<footer>
+  Rate limit: 60 req/min per IP · Cache: charts 1h, awards 24h ·
+  Historical: add <code>?date=YYYY-MM-DD</code> (snaps to that chart week's Saturday) ·
+  <code>curl https://chartly.pages.dev/api/charts/billboard/hot-100</code>
+</footer>
+
+<script>
+  const ENDPOINTS = [
+    { group: "Charts — Billboard", items: [
+      "/api/charts/billboard/hot-100",
+      "/api/charts/billboard/album-200",
+      "/api/charts/billboard/global-200",
+      "/api/charts/billboard/artist-100",
+    ]},
+    { group: "Awards", items: [
+      "/api/awards/gma/2026",
+      "/api/awards/grammy/2026",
+    ]},
+  ];
+
+  const sidebar = document.getElementById("sidebar");
+  const urlInput = document.getElementById("url");
+  const output = document.getElementById("output");
+  const meta = document.getElementById("meta");
+
+  ENDPOINTS.forEach(({ group, items }) => {
+    const h = document.createElement("h2");
+    h.textContent = group;
+    sidebar.appendChild(h);
+    items.forEach((ep) => {
+      const btn = document.createElement("button");
+      btn.className = "endpoint";
+      btn.innerHTML = `<span class="method">GET</span>${ep}`;
+      btn.onclick = () => {
+        document.querySelectorAll(".endpoint").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        urlInput.value = location.origin + ep;
+        run();
+      };
+      sidebar.appendChild(btn);
+    });
+  });
+
+  function highlight(json) {
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(\.\d+)?([eE][+-]?\d+)?)/g, (m) => {
+      let cls = "num";
+      if (/^"/.test(m)) cls = /:$/.test(m) ? "key" : "str";
+      else if (/true|false/.test(m)) cls = "bool";
+      else if (/null/.test(m)) cls = "null";
+      return `<span class="${cls}">${m}</span>`;
+    });
+  }
+
+  async function run() {
+    const url = urlInput.value.trim();
+    if (!url) return;
+    meta.innerHTML = "";
+    output.innerHTML = '<span class="placeholder">Loading…</span>';
+    const t0 = performance.now();
+    try {
+      const res = await fetch(url);
+      const text = await res.text();
+      const ms = Math.round(performance.now() - t0);
+      let pretty = text;
+      try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch {}
+      const cls = res.ok ? "status-ok" : "status-err";
+      const cache = res.headers.get("X-Cache") ?? "—";
+      meta.innerHTML =
+        `<span class="${cls}">${res.status} ${res.statusText}</span>` +
+        `<span>${ms} ms</span><span>cache: ${cache}</span>` +
+        `<button onclick="navigator.clipboard.writeText(document.getElementById('output').textContent)">Copy JSON</button>`;
+      output.innerHTML = highlight(pretty);
+    } catch (e) {
+      output.innerHTML = `<span class="status-err">Request failed: ${e.message}</span>`;
+    }
+  }
+
+  document.getElementById("send").onclick = run;
+  urlInput.addEventListener("keydown", (e) => e.key === "Enter" && run());
+  urlInput.value = location.origin + "/api";
+  run();
+</script>
+</body>
+</html>
