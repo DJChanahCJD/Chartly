@@ -14,6 +14,7 @@
 | `GET /api/awards/grammy/{year}` | 格莱美获奖名单 |
 | `GET /api/awards/gma/{year}` | 金曲奖（静态数据） |
 | `GET /api/awards/nobel/{year}` | 诺贝尔奖获奖名单 |
+| `GET /api/awards/oscars/{year}` | 奥斯卡获奖与提名名单 |
 
 榜单响应：
 
@@ -71,6 +72,29 @@ Nobel 响应：
 - 数据来自官方 API v2.1（`api.nobelprize.org`）实时代理，人名取 `knownName`（组织奖回退 `orgName`，如 2024 和平奖）。
 - 未颁奖的类别（如 1940-1942 战争期间）会被剔除；某年全部未颁奖时返回 `"categories": []` 而非 404。
 
+Oscars 响应（固定 Schema，获奖人归一为逗号分隔的人名列表）：
+
+```json
+{
+  "year": 2026,
+  "awards": [
+    {
+      "name": "Actor in a Leading Role",
+      "winner": { "name": "Michael B. Jordan", "work": "Sinners" },
+      "nominees": [
+        { "name": "Timothée Chalamet", "work": "Marty Supreme" },
+        { "name": "Leonardo DiCaprio", "work": "One Battle after Another" }
+      ]
+    }
+  ]
+}
+```
+
+- `year` 为**颁奖年份**（典礼页 URL 中的年份），范围 1929（第 1 届）至当前年，每届一个页面。
+- 获奖与提名**全部类别**都解析自官网仪式页（`oscars.org/oscars/ceremonies/{year}`）。多人获奖合并为逗号分隔的 `name`；同一人因多部影片得奖时 `work` 以 ` / ` 连接（如 1969 年最佳女主角双黄蛋）。
+- `Music (Original Song)` 的 `work` 为官网标注的作品（各年份的歌曲名/影片名不一致，按页面原样返回）。
+- 官网位于 Akamai 防护后，adapter 以完整浏览器头请求；上游改版或被拦截时该源暂时 502。
+
 错误统一为 `{ "error": { "status": 404, "message": "..." } }`。
 
 ## 历史查询
@@ -108,7 +132,7 @@ npm run deploy     # wrangler pages deploy
 ```text
 functions/
 ├── _lib/                  # 下划线前缀：不作为路由，仅供导入
-│   ├── adapters/          # billboard / grammy / gma / nobel
+│   ├── adapters/          # billboard / grammy / gma / nobel / oscars
 │   ├── cache.ts
 │   ├── cors.ts
 │   ├── ratelimit.ts
@@ -124,3 +148,7 @@ functions/
 - Nobel 为官方 API 实时代理，数据随 NobelPrize.org 更新（当年奖项于 10 月起陆续公布，公布前查询该年返回空列表）。
 - Grammy 年份按官网资格年（eligibility year）命名，请求较新年份会自动回退到最近一届，响应中的 `year` 为实际届次年份。
 - GMA（金曲奖）目前为内置静态种子数据，后续按年补充或接入真实抓取。
+
+## TODO
+
+- 引入 Hono 作为路由框架
