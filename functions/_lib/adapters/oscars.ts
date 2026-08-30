@@ -183,14 +183,16 @@ function ordinal(n: number): string {
   }
 }
 
-export async function fetchOscars(year: number): Promise<{ year: number; awards: OscarAward[] }> {
+export async function fetchOscars(
+  year: number,
+): Promise<{ edition: number; url: string; awards: OscarAward[] }> {
   const latest = new Date().getUTCFullYear();
-  const number = year - 1928;
-  if (number < 1 || year > latest) {
+  const edition = year - 1928;
+  if (edition < 1 || year > latest) {
     throw new Error(`oscars: no ceremony for year ${year} (available: 1929-${latest})`);
   }
 
-  const title = `${ordinal(number)} Academy Awards`;
+  const title = `${ordinal(edition)} Academy Awards`;
   const res = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(title)}`,
     { headers: UA, redirect: "follow" },
@@ -201,5 +203,5 @@ export async function fetchOscars(year: number): Promise<{ year: number; awards:
   }
 
   const awards = parseArticle(await res.text());
-  return { year, awards };
+  return { edition, url: `https://en.wikipedia.org/wiki/${title.replace(/ /g, "_")}`, awards };
 }

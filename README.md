@@ -14,7 +14,8 @@
 | `GET /api/awards/grammy/{year}` | 格莱美获奖名单 |
 | `GET /api/awards/gma/{year}` | 金曲奖（静态数据） |
 | `GET /api/awards/nobel/{year}` | 诺贝尔奖获奖名单 |
-| `GET /api/awards/oscars/{year}` | 奥斯卡获奖与提名名单 |
+| `GET /api/awards/oscars/{year}` | 奥斯卡获奖与提名名单（Wikipedia 源） |
+| `GET /api/awards/oscars-org/{year}` | 奥斯卡获奖与提名名单（官网 oscars.org 源） |
 | `GET /api/awards/tga/{year}` | TGA 获奖名单（2014 起，仅获奖者） |
 
 榜单响应：
@@ -77,7 +78,8 @@ Oscars 响应（固定 Schema，获奖人归一为逗号分隔的人名列表）
 
 ```json
 {
-  "year": 2026,
+  "edition": 98,
+  "url": "https://en.wikipedia.org/wiki/98th_Academy_Awards",
   "awards": [
     {
       "name": "Actor in a Leading Role",
@@ -91,10 +93,33 @@ Oscars 响应（固定 Schema，获奖人归一为逗号分隔的人名列表）
 }
 ```
 
-- `year` 为**颁奖年份**（典礼页 URL 中的年份），范围 1929（第 1 届）至当前年，每届一个页面。
-- 获奖与提名**全部类别**都解析自官网仪式页（`oscars.org/oscars/ceremonies/{year}`）。多人获奖合并为逗号分隔的 `name`；同一人因多部影片得奖时 `work` 以 ` / ` 连接（如 1969 年最佳女主角双黄蛋）。
-- `Music (Original Song)` 的 `work` 为官网标注的作品（各年份的歌曲名/影片名不一致，按页面原样返回）。
-- 官网位于 Akamai 防护后，adapter 以完整浏览器头请求；上游改版或被拦截时该源暂时 502。
+- 入参为**颁奖年份**（第 N 届 = N + 1928），范围 1929（第 1 届）至当前年；响应返回届数 `edition` 与数据来源 `url`，不回显请求参数。
+- 数据抓取自 Wikipedia 奥斯卡条目（oscars.org 位于 Akamai 防护后，会拦截 Cloudflare Workers 的出站请求）。获奖与提名**全部类别**都有；多人获奖合并为逗号分隔的 `name`，同一人因多部影片得奖时 `work` 以 ` / ` 连接（如 1969 年最佳女主角双黄蛋）。
+- `Music (Original Song)` 的 `work` 为影片名，词曲作者归一为 `name`。
+- 上游条目改版会导致该源暂时 502。
+
+Oscars Org 响应（与 Oscars 同构，数据改抓官网仪式页）：
+
+```json
+{
+  "edition": 98,
+  "url": "https://www.oscars.org/oscars/ceremonies/2026",
+  "awards": [
+    {
+      "name": "Actor in a Leading Role",
+      "winner": { "name": "Michael B. Jordan", "work": "Sinners" },
+      "nominees": [
+        { "name": "Timothée Chalamet", "work": "Marty Supreme" },
+        { "name": "Leonardo DiCaprio", "work": "One Battle after Another" }
+      ]
+    }
+  ]
+}
+```
+
+- 入参与返回结构与 `oscars` 完全一致，`url` 指向官网仪式页。
+- 两源个别字段略有出入：官网 `Music (Original Song)` 的 `work` 是歌曲名（Wikipedia 源是影片名），人名大小写也可能不同。
+- 官网位于 Akamai 防护后，可能拦截 Cloudflare 的出站请求（表现为 502）；若该源不可用请改用 `oscars`（Wikipedia 源）。
 
 TGA 响应（固定 Schema，仅获奖者，无提名）：
 
