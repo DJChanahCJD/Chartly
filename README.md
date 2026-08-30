@@ -15,6 +15,7 @@
 | `GET /api/awards/gma/{year}` | 金曲奖（静态数据） |
 | `GET /api/awards/nobel/{year}` | 诺贝尔奖获奖名单 |
 | `GET /api/awards/oscars/{year}` | 奥斯卡获奖与提名名单 |
+| `GET /api/awards/tga/{year}` | TGA 获奖名单（2014 起，仅获奖者） |
 
 榜单响应：
 
@@ -95,6 +96,23 @@ Oscars 响应（固定 Schema，获奖人归一为逗号分隔的人名列表）
 - `Music (Original Song)` 的 `work` 为官网标注的作品（各年份的歌曲名/影片名不一致，按页面原样返回）。
 - 官网位于 Akamai 防护后，adapter 以完整浏览器头请求；上游改版或被拦截时该源暂时 502。
 
+TGA 响应（固定 Schema，仅获奖者，无提名）：
+
+```json
+{
+  "edition": 12,
+  "awards": [
+    { "name": "Game of the Year", "winner": "Clair Obscur: Expedition 33" },
+    { "name": "Best Performance", "winner": "Jennifer English" }
+  ]
+}
+```
+
+- 入参为**颁奖年份**（2014 = 第 1 届），响应返回届数 `edition = year - 2013`，不回显请求参数。
+- `winner` 为字符串：游戏类是游戏名，个人类（Performance / Score and Music / Esports Athlete 等）是人名，与官网展示一致。
+- 数据源：最新一届取官网 nominees 页内嵌的 `allAwards` 数据（颁奖前 `winner` 为 `null`）；历史届取 Rewind 归档页（`/rewind/year-{N}`，仅含 winner，无 nominees）。类别名统一 Title Case。
+- 结果几乎不变，缓存 7 天。
+
 错误统一为 `{ "error": { "status": 404, "message": "..." } }`。
 
 ## 历史查询
@@ -109,7 +127,7 @@ GET /api/charts/billboard/album-200?date=2020-06-01
 ## 限流与缓存
 
 - 限流：每 IP 60 请求/分钟，超限返回 `429` + `Retry-After`（isolate 内存实现，跨实例为近似计数）。
-- 缓存：Cloudflare Cache API，榜单 1 小时、奖项 24 小时，响应带 `X-Cache: HIT/MISS`。
+- 缓存：Cloudflare Cache API，榜单 1 小时、奖项 24 小时（TGA 为 7 天），响应带 `X-Cache: HIT/MISS`。
 - CORS：全开放（`*`）。
 
 ## 本地开发
@@ -132,7 +150,7 @@ npm run deploy     # wrangler pages deploy
 ```text
 functions/
 ├── _lib/                  # 下划线前缀：不作为路由，仅供导入
-│   ├── adapters/          # billboard / grammy / gma / nobel / oscars
+│   ├── adapters/          # billboard / grammy / gma / nobel / oscars / tga
 │   ├── cache.ts
 │   ├── cors.ts
 │   ├── ratelimit.ts

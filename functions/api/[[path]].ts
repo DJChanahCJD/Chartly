@@ -7,6 +7,7 @@ import { fetchGrammy } from "../_lib/adapters/grammy";
 import { fetchGma, GMA_YEARS } from "../_lib/adapters/gma";
 import { fetchNobel } from "../_lib/adapters/nobel";
 import { fetchOscars } from "../_lib/adapters/oscars";
+import { fetchTga } from "../_lib/adapters/tga";
 
 export const onRequest: PagesFunction = async ({ request, params }) => {
   if (request.method === "OPTIONS") return preflight();
@@ -31,6 +32,7 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
         "/api/awards/grammy/{year}",
         "/api/awards/nobel/{year}",
         "/api/awards/oscars/{year}",
+        "/api/awards/tga/{year}  (2014+, winners only)",
       ],
     });
   }
@@ -79,13 +81,17 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
       if (source === "oscars") {
         return await withCache(request, 86400, async () => json(await fetchOscars(year)));
       }
+      // TGA results essentially never change; cache for a week.
+      if (source === "tga") {
+        return await withCache(request, 604800, async () => json(await fetchTga(year)));
+      }
       return errorJson(404, `unknown awards source: ${source}`);
     }
 
     return errorJson(404, "not found");
   } catch (err) {
     const message = err instanceof Error ? err.message : "upstream error";
-    if (message.startsWith("gma:") || message.startsWith("nobel:") || message.startsWith("oscars:")) {
+    if (message.startsWith("gma:") || message.startsWith("nobel:") || message.startsWith("oscars:") || message.startsWith("tga:")) {
       return errorJson(404, message);
     }
     return errorJson(502, `upstream fetch failed: ${message}`);
