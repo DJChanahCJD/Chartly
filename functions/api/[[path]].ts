@@ -4,10 +4,9 @@ import { withCache } from "../_lib/cache";
 import { rateLimit, clientIp } from "../_lib/ratelimit";
 import { fetchBillboardChart, BILLBOARD_CHARTS } from "../_lib/adapters/billboard";
 import { fetchGrammy } from "../_lib/adapters/grammy";
-import { fetchGma, GMA_YEARS } from "../_lib/adapters/gma";
+import { fetchGma } from "../_lib/adapters/gma";
 import { fetchNobel } from "../_lib/adapters/nobel";
 import { fetchOscars } from "../_lib/adapters/oscars";
-import { fetchOscarsOrg } from "../_lib/adapters/oscars-org";
 import { fetchTga } from "../_lib/adapters/tga";
 
 export const onRequest: PagesFunction = async ({ request, params }) => {
@@ -33,7 +32,6 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
         "/api/awards/grammy/{year}",
         "/api/awards/nobel/{year}",
         "/api/awards/oscars/{year}",
-        "/api/awards/oscars-org/{year}",
         "/api/awards/tga/{year}",
       ],
     });
@@ -83,9 +81,6 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
       if (source === "oscars") {
         return await withCache(request, 86400, async () => json(await fetchOscars(year)));
       }
-      if (source === "oscars-org") {
-        return await withCache(request, 86400, async () => json(await fetchOscarsOrg(year)));
-      }
       // TGA results essentially never change; cache for a week.
       if (source === "tga") {
         return await withCache(request, 604800, async () => json(await fetchTga(year)));
@@ -100,7 +95,6 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
       message.startsWith("gma:") ||
       message.startsWith("nobel:") ||
       message.startsWith("oscars:") ||
-      message.startsWith("oscars-org:") ||
       message.startsWith("tga:")
     ) {
       return errorJson(404, message);

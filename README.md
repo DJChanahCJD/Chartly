@@ -15,7 +15,6 @@
 | `GET /api/awards/gma/{year}` | 金曲奖（静态数据） |
 | `GET /api/awards/nobel/{year}` | 诺贝尔奖获奖名单 |
 | `GET /api/awards/oscars/{year}` | 奥斯卡获奖与提名名单（Wikipedia 源） |
-| `GET /api/awards/oscars-org/{year}` | 奥斯卡获奖与提名名单（官网 oscars.org 源） |
 | `GET /api/awards/tga/{year}` | TGA 获奖名单（2014 起，仅获奖者） |
 
 榜单响应：

@@ -113,7 +113,6 @@
       "/api/awards/grammy/2026",
       "/api/awards/nobel/2025",
       "/api/awards/oscars/2026",
-      "/api/awards/oscars-org/2026",
       "/api/awards/tga/2025",
     ]},
   ];
@@ -164,10 +163,9 @@
       let pretty = text;
       try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch {}
       const cls = res.ok ? "status-ok" : "status-err";
-      const cache = res.headers.get("X-Cache") ?? "—";
       meta.innerHTML =
         `<span class="${cls}">${res.status} ${res.statusText}</span>` +
-        `<span>${ms} ms</span><span>cache: ${cache}</span>` +
+        `<span>${ms} ms</span>` +
         `<button onclick="navigator.clipboard.writeText(document.getElementById('output').textContent)">Copy JSON</button>`;
       output.innerHTML = highlight(pretty);
     } catch (e) {

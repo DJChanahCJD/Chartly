@@ -5,7 +5,7 @@ const edition12: GmaEditionData = {
   edition: 12,
   year: 2001,
   categories: [
-    { name: "最佳流行音乐演唱专辑奖", winner: "周杰伦", title: "杰伦" },
+    { name: "最佳流行音乐演唱专辑奖", winner: "周杰伦", title: "Jay" },
     { name: "最佳流行音乐演奏专辑奖", winner: "亚洲唱片有限公司", title: "垦丁－台湾国家公园音乐(一)" },
     { name: "最佳音乐录影带奖", winner: "魔岩唱片股份有限公司", title: "跆拳道" },
     { name: "最佳作曲人奖（流行音乐类）", winner: "李偲菘", title: "天黑黑（孙燕姿同名专辑）" },
