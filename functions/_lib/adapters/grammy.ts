@@ -1,6 +1,6 @@
 // Grammy awards adapter.
 // Scrapes the ceremony page on grammy.com (WordPress-rendered HTML), which
-// contains a full winners table (<tbody id="winnersTableBody">) with one row
+// contains a full winners table (<tbody id="nominationsTableBody">) with one row
 // per category: Category | Winner | Title. The top categories additionally
 // have accordion sections with full nominee lists — those are merged in.
 //
@@ -37,7 +37,7 @@ function htmlText(s: string): string {
 }
 
 function parseWinnersTable(html: string): Category[] {
-  const tbody = html.match(/<tbody id="winnersTableBody">([\s\S]*?)<\/tbody>/);
+  const tbody = html.match(/<tbody id="nominationsTableBody">([\s\S]*?)<\/tbody>/);
   if (!tbody) throw new Error("grammy upstream: winners table not found");
 
   const categories: Category[] = [];
